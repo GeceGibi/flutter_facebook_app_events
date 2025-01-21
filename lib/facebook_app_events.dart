@@ -5,6 +5,19 @@ import 'package:flutter/services.dart';
 
 const channelName = 'flutter.oddbit.id/facebook_app_events';
 
+enum FAppEventsLogLevel {
+  accessTokens,
+  appEvents,
+  cacheErrors,
+  developerErrors,
+  graphAPIDebugInfo,
+  graphAPIDebugWarning,
+  informational,
+  networkRequests,
+  performanceCharacteristics,
+  uiControlErrors
+}
+
 class FacebookAppEvents {
   static const _channel = MethodChannel(channelName);
 
@@ -48,6 +61,14 @@ class FacebookAppEvents {
   /// Clears the current user data
   Future<void> clearUserData() {
     return _channel.invokeMethod<void>('clearUserData');
+  }
+
+  /// Set Log Level
+  Future<void> setLogLevel(Set<FAppEventsLogLevel> levels) {
+    return _channel.invokeMethod<void>(
+      'setLogLevel',
+      levels.map((e) => e.name).toList(),
+    );
   }
 
   /// Sets user data to associate with all app events.

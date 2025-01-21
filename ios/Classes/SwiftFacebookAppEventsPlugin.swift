@@ -78,9 +78,44 @@ public class SwiftFacebookAppEventsPlugin: NSObject, FlutterPlugin {
         case "setAdvertiserTracking":
             handleSetAdvertiserTracking(call, result: result)
             break
+        case "setLogLevel":
+            handleLogLevel(call, result: result)
+            break
         default:
             result(FlutterMethodNotImplemented)
         }
+    }
+    
+    func logLevel(from string: String) -> LoggingBehavior? {
+        switch string {
+            case "accessTokens":
+                return .accessTokens
+            case "appEvents":
+                return .appEvents
+            case "cacheErrors":
+                return .cacheErrors
+            case "developerErrors":
+                return .developerErrors
+            case "graphAPIDebugInfo":
+                return .graphAPIDebugInfo
+            case "graphAPIDebugWarning":
+                return .graphAPIDebugWarning
+            case "informational":
+                return .informational
+            case "networkRequests":
+                return .networkRequests
+            case "performanceCharacteristics":
+                return .performanceCharacteristics
+            case "uiControlErrors":
+                return .uiControlErrors
+            default:
+                return nil
+            }
+    }
+    
+    private func handleLogLevel(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        var levels = Set((call.arguments as! Array<String>).compactMap(logLevel))
+        Settings.shared.loggingBehaviors = levels
     }
 
     private func handleClearUserData(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
